@@ -1,4 +1,4 @@
-package com.commonsware.android.skeleton;
+package com.commonsware.helloandroidtest;
 import android.app.Activity;
 
 import android.os.Bundle;
