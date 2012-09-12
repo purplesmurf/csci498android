@@ -5,6 +5,7 @@ public class Restaurant {
 	private String address = "";
 	private String date = "";
 	private String type = "";
+	private String notes = "";
 	
 	public String getName() {
 		return name;
@@ -29,6 +30,12 @@ public class Restaurant {
 	}
 	public void setDate(String date){
 		this.date = date;
+	}
+	public String getNotes(){
+		return notes;
+	}
+	public void setNotes(String notes){
+		this.notes = notes;
 	}
 	
 	
