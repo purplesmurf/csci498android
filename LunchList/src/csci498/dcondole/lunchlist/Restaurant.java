@@ -1,9 +1,10 @@
 package csci498.dcondole.lunchlist;
 
 public class Restaurant {
-	private String name="";
-	private String address="";
-	private String type="";
+	private String name = "";
+	private String address = "";
+	private String date = "";
+	private String type = "";
 	
 	public String getName() {
 		return name;
@@ -22,6 +23,12 @@ public class Restaurant {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getDate(){
+		return date;
+	}
+	public void setDate(String date){
+		this.date = date;
 	}
 	
 	

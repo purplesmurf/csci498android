@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class MainActivity extends TabActivity {
 	ArrayAdapter<Restaurant> adapter = null;
 	EditText name = null;
 	EditText address = null;
+	EditText date = null;
 	RadioGroup types = null;
 
 
@@ -37,6 +39,7 @@ public class MainActivity extends TabActivity {
 
 		name = (EditText)findViewById(R.id.name);
 		address = (EditText)findViewById(R.id.addr);
+		date = (EditText)findViewById(R.id.dates);
 		types = (RadioGroup)findViewById(R.id.types);
 
 		Button save=(Button)findViewById(R.id.save);
@@ -50,7 +53,6 @@ public class MainActivity extends TabActivity {
 
 		TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
 		spec.setContent(R.id.restaurants);
-
 		spec.setIndicator("List", getResources()
 				.getDrawable(R.drawable.list));
 
@@ -72,9 +74,11 @@ public class MainActivity extends TabActivity {
 
 			EditText name=(EditText)findViewById(R.id.name);
 			EditText address=(EditText)findViewById(R.id.addr);
+			EditText date=(EditText)findViewById(R.id.dates);
 
 			r.setName(name.getText().toString());
 			r.setAddress(address.getText().toString());
+			r.setDate(date.getText().toString());
 
 			RadioGroup types=(RadioGroup)findViewById(R.id.types);
 
@@ -103,6 +107,7 @@ public class MainActivity extends TabActivity {
 			Restaurant r=model.get(position);
 			name.setText(r.getName());
 			address.setText(r.getAddress());
+			date.setText(r.getDate());
 		
 		if (r.getType().equals("sit_down")) {
 			types.check(R.id.sit_down);
@@ -156,16 +161,19 @@ class RestaurantAdapter extends ArrayAdapter<Restaurant> {
 static class RestaurantHolder {
 	private TextView name = null;
 	private TextView address = null;
+	private TextView date = null;
 	private ImageView icon = null;
 
 	RestaurantHolder(View row) {
 		name = (TextView)row.findViewById(R.id.title);
 		address = (TextView)row.findViewById(R.id.address);
+		date = (TextView)row.findViewById(R.id.dates);
 		icon = (ImageView)row.findViewById(R.id.icon);
 	}
 	void populateFrom(Restaurant r) {
 		name.setText(r.getName());
 		address.setText(r.getAddress());
+		date.setText(r.getDate());
 
 		if (r.getType().equals("sit_down")) {
 			icon.setImageResource(R.drawable.ball_red);

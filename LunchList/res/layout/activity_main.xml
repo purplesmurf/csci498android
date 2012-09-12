@@ -45,6 +45,20 @@
 
                     <EditText android:id="@+id/addr" />
                 </TableRow>
+                
+                <TableRow>
+                    <TextView android:text="Date: " />
+
+                    <EditText
+                        android:id="@+id/dates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" >
+
+                        <requestFocus />
+                    </EditText>
+
+                </TableRow>
 
                 <TableRow>
 
