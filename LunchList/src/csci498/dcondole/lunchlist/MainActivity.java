@@ -4,12 +4,14 @@ import android.R.id;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,14 +38,7 @@ public class MainActivity extends TabActivity {
 	EditText notes = null;
 	RadioGroup types = null;
 	Restaurant current = null;
-
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		new MenuInflater(this).inflate(R.menu.option, menu);
-
-		return(super.onCreateOptionsMenu(menu));
-	}
+	int progress;
 
 
 	@Override
@@ -54,16 +49,51 @@ public class MainActivity extends TabActivity {
 				message=current.getNotes();
 			}
 			Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
 			return(true);
 		}
+		else if (item.getItemId()==R.id.run) {
+			setProgressBarVisibility(true);
+			progress=0;
+			new Thread(longTask).start();
+			return(true);
+
+		}
+
 		return(super.onOptionsItemSelected(item));
+
 	}
 
+	private void doSomeLongWork(final int incr) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				progress+=incr;
+				setProgress(progress);
+			}
+		});
+		
+		SystemClock.sleep(250); // should be something more useful!
+	}
+
+	private Runnable longTask=new Runnable() {
+		public void run() {
+			for (int i=0;i<20;i++) {
+				doSomeLongWork(500);
+			}
+		}
+	};
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		new MenuInflater(this).inflate(R.menu.option, menu);
+
+		return(super.onCreateOptionsMenu(menu));
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
 		name = (EditText)findViewById(R.id.name);
@@ -101,7 +131,7 @@ public class MainActivity extends TabActivity {
 	private View.OnClickListener onSave=new View.OnClickListener() {
 		public void onClick(View v) {
 			current = new Restaurant();
-			
+
 			EditText name=(EditText)findViewById(R.id.name);
 			EditText address=(EditText)findViewById(R.id.addr);
 			//EditText date=(EditText)findViewById(R.id.dates);
