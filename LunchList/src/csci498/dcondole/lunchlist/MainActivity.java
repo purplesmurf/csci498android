@@ -23,7 +23,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,9 @@ public class MainActivity extends TabActivity {
 	EditText notes = null;
 	RadioGroup types = null;
 	Restaurant current = null;
-	int progress;
+	AtomicBoolean isActive=new AtomicBoolean(true);
+	int progress=0;
+
 
 
 	@Override
@@ -52,15 +54,11 @@ public class MainActivity extends TabActivity {
 			return(true);
 		}
 		else if (item.getItemId()==R.id.run) {
-			setProgressBarVisibility(true);
-			progress=0;
-			new Thread(longTask).start();
+			startWork();
 			return(true);
-
 		}
 
 		return(super.onOptionsItemSelected(item));
-
 	}
 
 	private void doSomeLongWork(final int incr) {
@@ -70,17 +68,48 @@ public class MainActivity extends TabActivity {
 				setProgress(progress);
 			}
 		});
-		
+
 		SystemClock.sleep(250); // should be something more useful!
 	}
 
 	private Runnable longTask=new Runnable() {
 		public void run() {
-			for (int i=0;i<20;i++) {
-				doSomeLongWork(500);
+			for (int i=progress;
+					i<10000 && isActive.get();
+					i+=200) {
+				doSomeLongWork(200);
+			}
+			if (isActive.get()) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						setProgressBarVisibility(false);
+						progress=0;
+					}
+				});
 			}
 		}
 	};
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		isActive.set(false);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		isActive.set(true);
+
+		if (progress>0) {
+			startWork();
+		}
+	}
+
+	private void startWork() {
+		setProgressBarVisibility(true);
+		new Thread(longTask).start();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
