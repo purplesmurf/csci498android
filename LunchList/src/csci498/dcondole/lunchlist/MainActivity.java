@@ -89,6 +89,18 @@ public class MainActivity extends TabActivity {
 			}
 		}
 	};
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		
+	}
 
 	@Override
 	public void onStop() {
