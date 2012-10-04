@@ -1,25 +1,20 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="csci498.dcondole.lunchlist"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="15" />
-
-    <application
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-            <intent-filter>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest android:versionCode="1"
+    	  android:versionName="1.0"
+    	  package="csci498.dcondole.lunchlist"
+    	  xmlns:android="http://schemas.android.com/apk/res/android">
+    	  
+    <supports-screens android:largeScreens="true"
+        		      android:normalScreens="true"
+        		      android:smallScreens="false" />
+    <application android:label="@string/app_name">
+        <activity android:label="@string/app_name"
+                  android:name=".LunchList">
+            <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DetailForm"></activity>
     </application>
-
 </manifest>
