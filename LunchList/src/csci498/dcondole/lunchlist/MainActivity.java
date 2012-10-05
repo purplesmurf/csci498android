@@ -1,108 +1,76 @@
 package csci498.dcondole.lunchlist;
 
-import android.R.id;
-import android.app.Activity;
-import android.app.TabActivity;
+
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.LayoutInflater;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class MainActivity extends TabActivity {
-	Cursor model = null;
-	RestaurantAdapter adapter = null;
-	EditText name = null;
-	EditText address = null;
-	EditText notes = null;
-	RadioGroup types = null;
-	RestaurantHelper helper = null;
+public class MainActivity extends ListActivity {
+	
+	public final static String ID_EXTRA = "csci498.dcondole._ID";
+	
+	Cursor model;
+	RestaurantAdapter adapter;
+	RestaurantHelper helper;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		helper = new RestaurantHelper(this);
-		name = (EditText)findViewById(R.id.name);
-		address = (EditText)findViewById(R.id.addr);
-		notes = (EditText)findViewById(R.id.notes);
-		types = (RadioGroup)findViewById(R.id.types);
-
-		Button save = (Button)findViewById(R.id.save);
-		save.setOnClickListener(onSave);
-
-		ListView list = (ListView)findViewById(R.id.restaurants);
-
-		model=helper.getAll();
+		model = helper.getAll();
 		startManagingCursor(model);
 		adapter = new RestaurantAdapter(model);
-		list.setAdapter(adapter);
-
-		TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
-		spec.setContent(R.id.restaurants);
-		spec.setIndicator("List", getResources()
-				.getDrawable(R.drawable.list));
-
-		getTabHost().addTab(spec);
-		spec=getTabHost().newTabSpec("tag2");
-		spec.setContent(R.id.details);
-		spec.setIndicator("Details", getResources()
-				.getDrawable(R.drawable.restaurant));
-
-		getTabHost().addTab(spec);
-		getTabHost().setCurrentTab(0);
-		list.setOnItemClickListener(onListClick);
+		setListAdapter(adapter);
 	}
+	
+	@Override
+	public void onListItemClick(ListView list, View view, int position, long id) {
+		Intent i = new Intent(MainActivity.this, DetailForm.class);
+		
+		i.putExtra(ID_EXTRA, String.valueOf(id));
+		startActivity(i);
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
 		helper.close();
 	}
-	private View.OnClickListener onSave=new View.OnClickListener() {
-		public void onClick(View v) {
-			String type = null;
-			switch (types.getCheckedRadioButtonId()) {
-			case R.id.sit_down:
-				type = "sit_down";
-				break;
-			case R.id.take_out:
-				type = "take_out";
-				break;
-			case R.id.delivery:
-				type = "delivery";
-				break;
-			}
-			helper.insert(name.getText().toString(),
-					address.getText().toString(), type,
-					notes.getText().toString());
-			model.requery();
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		new MenuInflater(this).inflate(R.menu.option, menu);
+		
+		return(super.onCreateOptionsMenu(menu));
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.add) {
+			startActivity(new Intent(MainActivity.this, DetailForm.class));
+			
+			return(true);
 		}
-	};
+		
+		return(super.onOptionsItemSelected(item));
+	}
 
 	private AdapterView.OnItemClickListener onListClick=new
 			AdapterView.OnItemClickListener() {
@@ -115,7 +83,7 @@ public class MainActivity extends TabActivity {
 		}
 	};
 
-	class RestaurantAdapter extends CursorAdapter implements ListAdapter {
+	class RestaurantAdapter extends CursorAdapter {
 		RestaurantAdapter(Cursor c) {
 			super(MainActivity.this, c);
 		}
@@ -123,8 +91,8 @@ public class MainActivity extends TabActivity {
 		public void bindView(View row, Context ctxt,
 				Cursor c) {
 			RestaurantHolder holder = (RestaurantHolder)row.getTag();
+			
 			holder.populateFrom(c, helper);
-
 		}
 		@Override
 		public View newView(Context ctxt, Cursor c,
