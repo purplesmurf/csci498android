@@ -20,117 +20,104 @@ import android.widget.TextView;
 
 
 public class MainActivity extends ListActivity {
-	
+
 	public final static String ID_EXTRA = "csci498.dcondole._ID";
-	
-	Cursor model;
-	RestaurantAdapter adapter;
-	RestaurantHelper helper;
-	
+	Cursor model = null;
+	RestaurantAdapter adapter = null;
+	RestaurantHelper helper = null;
+
 	@Override
-	public void onCreate(Bundle savedInstanceState){
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		helper = new RestaurantHelper(this);
-		model = helper.getAll();
+		helper=new RestaurantHelper(this);
+		model=helper.getAll();
 		startManagingCursor(model);
-		adapter = new RestaurantAdapter(model);
+		adapter=new RestaurantAdapter(model);
 		setListAdapter(adapter);
 	}
-	
+
 	@Override
-	public void onListItemClick(ListView list, View view, int position, long id) {
-		Intent i = new Intent(MainActivity.this, DetailForm.class);
-		
+	public void onDestroy(){
+		super.onDestroy();
+
+		helper.close();
+	}
+
+	@Override
+	public void onListItemClick(ListView list, View view,
+			int position, long id) {
+		Intent i=new Intent(MainActivity.this, DetailForm.class);
 		i.putExtra(ID_EXTRA, String.valueOf(id));
 		startActivity(i);
 	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		
-		helper.close();
-	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		new MenuInflater(this).inflate(R.menu.option , menu);
-		
+		new MenuInflater(this).inflate(R.menu.option, menu);
+
 		return(super.onCreateOptionsMenu(menu));
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.add) {
+		if (item.getItemId()==R.id.add) {
 			startActivity(new Intent(MainActivity.this, DetailForm.class));
-			
+
 			return(true);
 		}
-		
 		return(super.onOptionsItemSelected(item));
 	}
-
-	private AdapterView.OnItemClickListener onListClick=new
-			AdapterView.OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent,
-				View view, int position,
-				long id) {
-			Intent i=new Intent(MainActivity.this, DetailForm.class);
-			
-			startActivity(i);
-		}
-	};
 
 	class RestaurantAdapter extends CursorAdapter {
 		RestaurantAdapter(Cursor c) {
 			super(MainActivity.this, c);
 		}
+
 		@Override
 		public void bindView(View row, Context ctxt,
 				Cursor c) {
-			RestaurantHolder holder = (RestaurantHolder)row.getTag();
-			
+			RestaurantHolder holder=(RestaurantHolder)row.getTag();
+
 			holder.populateFrom(c, helper);
 		}
+
 		@Override
 		public View newView(Context ctxt, Cursor c,
 				ViewGroup parent) {
-
-			LayoutInflater inflater = getLayoutInflater();
+			LayoutInflater inflater=getLayoutInflater();
 			View row=inflater.inflate(R.layout.row, parent, false);
-			RestaurantHolder holder = new RestaurantHolder(row);
+			RestaurantHolder holder=new RestaurantHolder(row);
 			row.setTag(holder);
+
 			return(row);
 		}
 	}
-
+	
 	static class RestaurantHolder {
 		private TextView name = null;
 		private TextView address = null;
 		private ImageView icon = null;
 		
+		
 		RestaurantHolder(View row) {
-			name=(TextView)row.findViewById(R.id.title);
-			address=(TextView)row.findViewById(R.id.address);
-			icon=(ImageView)row.findViewById(R.id.icon);
+			name = (TextView)row.findViewById(R.id.title);
+			address = (TextView)row.findViewById(R.id.address);
+			icon = (ImageView)row.findViewById(R.id.icon);
 		}
 		
-		void populateFrom(Cursor c, RestaurantHelper helper) {
-			
+		void populateFrom(Cursor c, RestaurantHelper helper){
 			name.setText(helper.getName(c));
 			address.setText(helper.getAddress(c));
 			
-			if (helper.getType(c).equals("sit_down")) {
+			if (helper.getType(c).equals("sit_down")){
 				icon.setImageResource(R.drawable.ball_red);
 			}
-			else if (helper.getType(c).equals("take_out")) {
+			else if (helper.getType(c).equals("take_out")){
 				icon.setImageResource(R.drawable.ball_yellow);
 			}
 			else {
 				icon.setImageResource(R.drawable.ball_green);
-
 			}
 		}
 	}
