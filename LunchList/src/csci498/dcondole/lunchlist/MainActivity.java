@@ -59,10 +59,15 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId()==R.id.add) {
+		if (item.getItemId() == R.id.add) {
 			startActivity(new Intent(MainActivity.this, DetailForm.class));
 
-			return(true);
+			return (true);
+		}
+		else if (item.getItemId() == R.id.prefs){
+			startActivity(new Intent(this, EditPreferences.class));
+			
+			return (true);
 		}
 
 		return(super.onOptionsItemSelected(item));
