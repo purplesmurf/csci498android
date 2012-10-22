@@ -9,17 +9,23 @@
         android:stretchColumns="1" >
 
         <TableRow>
+
             <TextView android:text="Name:" />
+
             <EditText android:id="@+id/name" />
         </TableRow>
 
         <TableRow>
+
             <TextView android:text="Address:" />
+
             <EditText android:id="@+id/addr" />
         </TableRow>
 
         <TableRow>
+
             <TextView android:text="Type:" />
+
             <RadioGroup android:id="@+id/types" >
 
                 <RadioButton
@@ -37,18 +43,18 @@
             </RadioGroup>
         </TableRow>
 
-        <TableRow>
+        <EditText
+            android:id="@+id/notes"
+            android:gravity="top"
+            android:hint="Notes"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:maxLines="2"
+            android:scrollHorizontally="false" />
 
-            <TextView android:text="Notes:" />
-
-            <EditText
-                android:id="@+id/notes"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:lines="2"
-                android:maxLines="2"
-                android:scrollHorizontally="false" />
-        </TableRow>
+        <EditText
+            android:id="@+id/feed"
+            android:hint="Feed URL" />
 
         <Button
             android:id="@+id/save"
