@@ -28,6 +28,8 @@ public class DetailForm extends Activity {
 	String restaurantId;
 	TextView location;
 	LocationManager locMgr;
+	double latitude = 0.0d;
+	double longitude = 0.0d;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class DetailForm extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (restaurantId==null) {
 			menu.findItem(R.id.location).setEnabled(false);
+			menu.findItem(R.id.map).setEnabled(false);
 		}
 
 		return(super.onPrepareOptionsMenu(menu));
@@ -87,23 +90,26 @@ public class DetailForm extends Activity {
 		if (item.getItemId()==R.id.feed) {
 			if (isNetworkAvailable()) {
 				Intent i=new Intent(this, FeedActivity.class);
-
 				i.putExtra(FeedActivity.FEED_URL, feed.getText().toString());
 				startActivity(i);
 			}
 			else {
-				Toast
-				.makeText(this, "Sorry, the Internet is not available",
-						Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(this, "Sorry, the Internet is not available", Toast.LENGTH_LONG).show();
 			}
-
 			return(true);
 		}
 		else if (item.getItemId()==R.id.location) {
-			locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-					0, 0, onLocationChange);
-
+			locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,	0, 0, onLocationChange);
+			return(true);
+		}
+		else if (item.getItemId() == R.id.map) {
+			Intent i = new Intent(this, RestaurantMap.class);
+			
+			i.putExtra(RestaurantMap.EXTRA_LATITUDE, latitude);
+			i.putExtra(RestaurantMap.EXTRA_LONGITUDE, longitude);
+			i.putExtra(RestaurantMap.EXTRA_NAME, name.getText().toString());
+			
+			startActivity(i);
 			return(true);
 		}
 
@@ -135,10 +141,11 @@ public class DetailForm extends Activity {
 		else {
 			types.check(R.id.delivery);
 		}
+		
+		latitude = helper.getLatitude(c);
+		longitude = helper.getLongitude(c);
 
-		location.setText(String.valueOf(helper.getLatitude(c))
-				+", "
-				+String.valueOf(helper.getLongitude(c)));
+		location.setText(String.valueOf(latitude) + ", " + String.valueOf(longitude));
 
 		c.close();
 	}
