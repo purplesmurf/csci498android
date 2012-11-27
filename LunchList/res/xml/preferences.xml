@@ -13,7 +13,7 @@
         android:summary="Check if you want to know when it is time for lunch"
         android:title="Sound a Lunch Alarm" />
 
-    <apt.tutorial.TimePreference
+    <csci498.dcondole.lunchlist.TimePreference
         android:defaultValue="12:00"
         android:dependency="alarm"
         android:key="alarm_time"
@@ -24,7 +24,15 @@
         android:defaultValue="true"
         android:dependency="alarm"
         android:key="use_notification"
-        android:summary="Check if you want a status bar icon at lunchtime, or uncheck for a full-screen notice"
+        android:summary="Check if you want a status bar icon at lunchtime, or
+uncheck for a full-screen notice"
         android:title="Use a Notification" />
+
+    <RingtonePreference
+        android:dependency="alarm"
+        android:key="alarm_ringtone"
+        android:showSilent="true"
+        android:summary="Indicate the ringtone to play when it is lunchtime"
+        android:title="Alarm Ringtone" />
 
 </PreferenceScreen>
