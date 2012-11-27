@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailFragment extends Fragment {
-	
+
 	private static final String ARG_REST_ID = "csci498.dcondole.lunchlist.ARG_REST_ID";
 	EditText name;
 	EditText address;
@@ -108,6 +108,10 @@ public class DetailFragment extends Fragment {
 				i.putExtra(FeedActivity.FEED_URL, feed.getText().toString());
 				startActivity(i);
 			}
+			else if (item.getItemId()==R.id.help) {
+				startActivity(new Intent(getActivity(), HelpPage.class));
+			}
+
 			else {
 				Toast.makeText(getActivity(), "Sorry, the Internet is not available", Toast.LENGTH_LONG).show();
 			}
@@ -211,7 +215,7 @@ public class DetailFragment extends Fragment {
 
 	LocationListener onLocationChange = new LocationListener() {
 		public void onLocationChanged(Location fix) {
-			
+
 			getHelper().updateLocation(restaurantId, fix.getLatitude(), fix.getLongitude());
 			location.setText(String.valueOf(fix.getLatitude()) + ", " + String.valueOf(fix.getLongitude()));
 			locMgr.removeUpdates(onLocationChange);

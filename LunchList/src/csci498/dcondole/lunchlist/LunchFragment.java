@@ -66,6 +66,10 @@ public class LunchFragment extends ListFragment {
 			startActivity(new Intent(getActivity(), DetailForm.class));
 			return(true);
 		}
+		else if (item.getItemId()==R.id.help) {
+			startActivity(new Intent(getActivity(), HelpPage.class));
+		}
+
 		else if (item.getItemId() == R.id.prefs) {
 			startActivity(new Intent(getActivity(), EditPreferences.class));
 			return(true);
@@ -98,18 +102,18 @@ public class LunchFragment extends ListFragment {
 	public interface OnRestaurantListener {
 		void onRestaurantSelected(long id);
 	}
-	
+
 	class RestaurantAdapter extends CursorAdapter {
 		RestaurantAdapter(Cursor c) {
 			super(getActivity(), c);
 		}
-		
+
 		@Override
 		public void bindView(View row, Context ctxt, Cursor c) {
 			RestaurantHolder holder = (RestaurantHolder)row.getTag();
 			holder.populateFrom(c, helper);
 		}
-		
+
 		@Override
 		public View newView(Context ctxt, Cursor c, ViewGroup parent) {
 			LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -119,12 +123,12 @@ public class LunchFragment extends ListFragment {
 			return(row);
 		}
 	}
-	
+
 	static class RestaurantHolder {
 		private TextView name;
 		private TextView address;
 		private ImageView icon;
-		
+
 		RestaurantHolder(View row) {
 			name = (TextView)row.findViewById(R.id.title);
 			address = (TextView)row.findViewById(R.id.address);
@@ -133,7 +137,7 @@ public class LunchFragment extends ListFragment {
 		void populateFrom(Cursor c, RestaurantHelper helper) {
 			name.setText(helper.getName(c));
 			address.setText(helper.getAddress(c));
-			
+
 			if (helper.getType(c).equals("sit_down")) {
 				icon.setImageResource(R.drawable.ball_red);
 			}
