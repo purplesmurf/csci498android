@@ -17,8 +17,8 @@ public class OnAlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context ctxt, Intent intent) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
 		
-		boolean useNotification=prefs.getBoolean("use_notification",
-				true);
+		boolean useNotification = prefs.getBoolean("use_notification",	true);
+		
 		if (useNotification) {
 			NotificationManager mgr = (NotificationManager)ctxt.getSystemService(Context.NOTIFICATION_SERVICE);
 			

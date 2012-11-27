@@ -22,7 +22,7 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name=".LunchList"
+            android:name="MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +51,7 @@
         </service>
 
         <receiver
-            android:name=".OnBootReceiver"
+            android:name="OnBootReceiver"
             android:enabled="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -60,7 +60,7 @@
         <receiver android:name="OnAlarmReceiver" >
         </receiver>
         <receiver
-            android:name=".AppWidget"
+            android:name="AppWidget"
             android:icon="@drawable/icon"
             android:label="@string/app_name" >
             <intent-filter>
