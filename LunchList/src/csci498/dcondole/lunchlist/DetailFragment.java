@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class DetailFragment extends Fragment {
 	LocationManager locMgr;
 	double latitude = 0.0d;
 	double longitude = 0.0d;
+	EditText phone;
 
 	public static DetailFragment newInstance(long id) {
 		DetailFragment result = new DetailFragment();
@@ -69,6 +71,7 @@ public class DetailFragment extends Fragment {
 		types = (RadioGroup)getView().findViewById(R.id.types);
 		feed = (EditText)getView().findViewById(R.id.feed);
 		location = (TextView)getView().findViewById(R.id.location);
+		phone = (EditText)getView().findViewById(R.id.phone);
 
 		Bundle args = getArguments();
 
@@ -76,6 +79,11 @@ public class DetailFragment extends Fragment {
 			loadRestaurant(args.getString(ARG_REST_ID));
 		}
 	}
+
+	private boolean isTelephonyAvailable() {
+		return(getActivity().getPackageManager().hasSystemFeature("android.hardware.telephony"));
+	}
+
 
 	@Override
 	public void onPause() {
@@ -97,6 +105,11 @@ public class DetailFragment extends Fragment {
 			menu.findItem(R.id.location).setEnabled(false);
 			menu.findItem(R.id.map).setEnabled(false);
 		}
+
+		if (isTelephonyAvailable()) {
+			menu.findItem(R.id.call).setEnabled(true);
+		}
+
 	}
 
 	@Override
@@ -108,9 +121,17 @@ public class DetailFragment extends Fragment {
 				i.putExtra(FeedActivity.FEED_URL, feed.getText().toString());
 				startActivity(i);
 			}
-			else if (item.getItemId()==R.id.help) {
+			else if (item.getItemId() == R.id.help) {
 				startActivity(new Intent(getActivity(), HelpPage.class));
 			}
+			else if (item.getItemId() == R.id.call) {
+				String toDial = "tel:" + phone.getText().toString();
+				
+				if (toDial.length() > 4) {
+					startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(toDial)));
+				}
+			}
+
 
 			else {
 				Toast.makeText(getActivity(), "Sorry, the Internet is not available", Toast.LENGTH_LONG).show();
@@ -205,10 +226,10 @@ public class DetailFragment extends Fragment {
 			}
 
 			if (restaurantId == null) {
-				getHelper().insert(name.getText().toString(), address.getText().toString(), type, notes.getText().toString(), feed.getText().toString());
+				getHelper().insert(name.getText().toString(), address.getText().toString(), type, notes.getText().toString(), feed.getText().toString(), phone.getText().toString());
 			}
 			else {
-				getHelper().update(restaurantId, name.getText().toString(),	address.getText().toString(), type,	notes.getText().toString(),	feed.getText().toString());
+				getHelper().update(restaurantId, name.getText().toString(),	address.getText().toString(), type,	notes.getText().toString(),	feed.getText().toString(), phone.getText().toString());
 			}
 		}
 	}

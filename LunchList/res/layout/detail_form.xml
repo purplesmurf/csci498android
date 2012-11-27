@@ -7,36 +7,58 @@
         android:layout_height="wrap_content"
         android:shrinkColumns="1"
         android:stretchColumns="1" >
-        
+
         <TableRow>
+
             <TextView android:text="Name:" />
+
             <EditText android:id="@+id/name" />
         </TableRow>
-        
+
         <TableRow>
+
             <TextView android:text="Address:" />
+
             <EditText android:id="@+id/addr" />
         </TableRow>
-        
+
         <TableRow>
+
             <TextView android:text="Type:" />
+
             <RadioGroup android:id="@+id/types" >
+
                 <RadioButton
                     android:id="@+id/take_out"
                     android:checked="true"
                     android:text="Take-Out" />
+
                 <RadioButton
                     android:id="@+id/sit_down"
                     android:text="Sit-Down" />
+
                 <RadioButton
                     android:id="@+id/delivery"
                     android:text="Delivery" />
             </RadioGroup>
         </TableRow>
- 
+
         <TableRow>
+
             <TextView android:text="Location:" />
-            <TextView android:id="@+id/location" android:text="(not set)" />
+
+            <TextView
+                android:id="@+id/location"
+                android:text="(not set)" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Phone:" />
+
+            <EditText
+                android:id="@+id/phone"
+                android:inputType="phone" />
         </TableRow>
 
         <EditText

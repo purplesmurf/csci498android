@@ -17,5 +17,10 @@
         android:id="@+id/help"
         android:icon="@drawable/ic_menu_help"
         android:title="Help"/>
+    <item
+        android:id="@+id/call"
+        android:enabled="false"
+        android:icon="@drawable/ic_menu_call"
+        android:title="Call"/>
 
 </menu>
